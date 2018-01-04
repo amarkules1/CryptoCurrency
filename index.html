@@ -1,0 +1,63 @@
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>CryptoClicker</title>
+		<link href="stylesheet.css" rel="stylesheet">
+		
+	</head>
+	<body>
+		<header>
+		<h2>Crypto-Curency Price Display</h2>
+		<a href='last15Days.html' class='btn btn-info pull-left'>15 Day History</a>
+		<div id='priceMenu'></div>
+		</header> 
+		<div id="data"></div>
+		<script >
+		//cryptocurrency options
+		var currencies = new Array();
+		currencies[0] = ['Bitcoin','BTC'];
+		currencies[1] = ['Ethereum','ETH'];
+		currencies[2] = ['Litecoin','LTC'];
+		currencies[3] = ['Monero','XMR'];
+		currencies[4] = ['Dash','DASH'];
+		currencies[5] = ['Dogecoin','DOGE'];
+		
+		//add buttons
+		currencies.forEach(function(coin) {
+			var inputElement = document.createElement('input');
+			inputElement.type = "button";
+			inputElement.id = coin[1] + "btn";
+			inputElement.addEventListener('click', function(){ 
+				clicked(coin[1]);
+			});
+		
+			inputElement.value = coin[0];
+			document.getElementById('priceMenu').appendChild(inputElement);
+		});
+		
+		//get currency info
+		var clicked = function(val){
+		
+			var xmlhttp = new XMLHttpRequest(),
+			json;
+			xmlhttp.onreadystatechange = function() {
+				if(xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+					json = JSON.parse(xmlhttp.responseText);
+					//do something with your json
+					console.log(json);
+					document.getElementById("data").innerHTML ="<h3>Current Valuation of: " + json["Realtime Currency Exchange Rate"]["2. From_Currency Name"]
+					+ "(" + json["Realtime Currency Exchange Rate"]["1. From_Currency Code"] + ")" + "</h3>";
+					document.getElementById("data").innerHTML +="<h4>Price: $" + json["Realtime Currency Exchange Rate"]["5. Exchange Rate"] + "</h4>";
+				}
+			};
+			var currency = val;
+			console.log(currency);
+			xmlhttp.open('GET', 'https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=' + currency +'&to_currency=USD&apikey=KEIRAJC7LX8XJVVZ', true);
+			xmlhttp.send();
+		}
+			//document.write("<h4>Price: $ " + json.E
+		</script>
+		<footer><p>Source: <a href='https://www.alphavantage.co'>https://www.alphavantage.co</a></p></footer>
+	</body>
+</html>
