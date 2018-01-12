@@ -3,8 +3,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>CryptoClicker</title>
-		<link href="stylesheet.css" rel="stylesheet">
-		
+		<link href="stylesheet.css" rel="stylesheet"/>
+		<script src="resources/Chart.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<header>
@@ -12,7 +12,12 @@
 		<a href='last15Days.html' class='btn btn-info pull-left'>15 Day History</a>
 		<div id='priceMenu'></div>
 		</header> 
-		<div id="data"></div>
+		<div id="PriceData"></div>
+		<div id="past">
+		<h3>Past</h3>
+		<div id="pastOptions"></div>
+		<canvas id="myChart" width="90%" height="30%"></canvas></div>
+		<script src="CryptoAnalysisFunctions.js"></script>
 		<script >
 		//cryptocurrency options
 		var currencies = new Array();
@@ -24,42 +29,48 @@
 		currencies[5] = ['Dogecoin','DOGE'];
 		currencies[6] = ['Bitcoin Cash','BCH'];
 		currencies[7] = ['ZCash','ZEC'];
-		
-		//add buttons
+		topClicked(currencies[0]);
+		//add menu buttons
 		currencies.forEach(function(coin) {
 			var inputElement = document.createElement('input');
 			inputElement.type = "button";
 			inputElement.id = coin[1] + "btn";
 			inputElement.addEventListener('click', function(){ 
-				clicked(coin[1]);
+				topClicked(coin);
 			});
 		
 			inputElement.value = coin[0];
 			document.getElementById('priceMenu').appendChild(inputElement);
 		});
 		
-		//get currency info
-		var clicked = function(val){
+		var intraDay = document.createElement('input');
+		intraDay.type = "button";
+		intraDay.id = "intraDay";
+		intraDay.addEventListener('click', function(){
+			intraDayGraph();
+		});
+		intraDay.value = "DAY";
+		document.getElementById('pastOptions').appendChild(intraDay);
 		
-			var xmlhttp = new XMLHttpRequest(),
-			json;
-			xmlhttp.onreadystatechange = function() {
-				if(xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-					json = JSON.parse(xmlhttp.responseText);
-					//do something with your json
-					console.log(json);
-					document.getElementById("data").innerHTML ="<h3>Current Valuation of: " + json["Realtime Currency Exchange Rate"]["2. From_Currency Name"]
-					+ "(" + json["Realtime Currency Exchange Rate"]["1. From_Currency Code"] + ")" + "</h3>";
-					document.getElementById("data").innerHTML +="<h4>Price: $" + json["Realtime Currency Exchange Rate"]["5. Exchange Rate"] + "</h4>";
-				}
-			};
-			var currency = val;
-			console.log(currency);
-			xmlhttp.open('GET', 'https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=' + currency +'&to_currency=USD&apikey=KEIRAJC7LX8XJVVZ', true);
-			xmlhttp.send();
-		}
-			//document.write("<h4>Price: $ " + json.E
+		var thisMonth = document.createElement('input');
+		thisMonth.type = "button";
+		thisMonth.id = "Month";
+		thisMonth.addEventListener('click', function(){
+			MonthGraph();
+		});
+		thisMonth.value = "MONTH";
+		document.getElementById('pastOptions').appendChild(thisMonth);
+		
+		var thisYear = document.createElement('input');
+		thisYear.type = "button";
+		thisYear.id = "Year";
+		thisYear.addEventListener('click', function(){
+			YearGraph();
+		});
+		thisYear.value = "YEAR";
+		document.getElementById('pastOptions').appendChild(thisYear);
 		</script>
-		<footer><p>Source: <a href='https://www.alphavantage.co'>https://www.alphavantage.co</a></p></footer>
+		<p></br></br></p>
+		<footer><p>Source: <a href='https://www.cryptocompare.com/api'>https://www.cryptocompare.com/api</a></p></footer>
 	</body>
 </html>
