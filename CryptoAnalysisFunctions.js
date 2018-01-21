@@ -33,7 +33,7 @@ var intraDayGraph = function(){
 		}
 	};
 	
-	xmlhttp.open('GET', 'https://min-api.cryptocompare.com/data/histominute?fsym='+mainCur[1]+'&tsym=USD&limit=287&agregate=5&e=CCCAGG', true);
+	xmlhttp.open('GET', 'https://min-api.cryptocompare.com/data/histominute?fsym='+mainCur[1]+'&tsym=USD&limit=1439&e=CCCAGG', true);
 	xmlhttp.send();
 }
 
@@ -231,7 +231,7 @@ function createDayGraph(json){
 	for(i = 287; i>=0; i--){
 		times[i] = dateTime.getHours()+ ":" + dateTime.getMinutes();
 		dateTime = subMinutes(dateTime, 5);
-		priceData[i] = json["Data"][i]["close"];
+		priceData[i] = json["Data"][(i*5)+4]["close"];
 	}
 	var data = new Array();
 	for(i=0;i<287;i++){
