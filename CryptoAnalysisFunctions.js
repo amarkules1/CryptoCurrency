@@ -1,10 +1,12 @@
 var mainCur;
 var intraDayData;
 var dailyData;
+$( document ).ready(function() {
+  console.log( 'ready!' );
+});
 var topClicked = function(val){
 		
-	var xmlhttp = new XMLHttpRequest(),
-	json;
+	var xmlhttp = new XMLHttpRequest(),json;
 	xmlhttp.onreadystatechange = function() {
 		if(xmlhttp.readyState === 4 && xmlhttp.status === 200) {
 			json = JSON.parse(xmlhttp.responseText);
@@ -12,6 +14,7 @@ var topClicked = function(val){
 			console.log(json);
 			document.getElementById("PriceData").innerHTML ="<h3>Current Valuation of: " + val[0] + "(" +val[1] + ")" + "</h3>";
 			document.getElementById("PriceData").innerHTML +="<h4>Price: $" + json["USD"] + "</h4>";
+			MonthGraph();
 		}
 	};
 	mainCur = val;
@@ -54,6 +57,12 @@ var MonthGraph = function(){
 	xmlhttp.send();
 };
 function createMonthGraph(json){
+	(function(){
+		$('input#intraDay').removeClass();
+		$('input#Year').removeClass();
+		$('input#Month').addClass('activeGraph');
+	})(jQuery);
+	
 	var today = new Date();
 	var lastDate = today.getUTCFullYear() +"-"+ (today.getUTCMonth() + 1)+"-"+ today.getUTCDate();
 	lastDate = addZeros(lastDate);
@@ -103,6 +112,12 @@ function YearGraph(){
 	xmlhttp.send();
 }
 function createYearGraph(json){
+	(function(){
+		$('input#intraDay').removeClass();
+		$('input#Month').removeClass();
+		$('input#Year').addClass('activeGraph');
+	})(jQuery);
+	
 	var today = new Date();
 	var lastDate = today.getUTCFullYear() +"-"+ (today.getUTCMonth() + 1)+"-"+ today.getUTCDate();
 	lastDate = addZeros(lastDate);
@@ -224,6 +239,12 @@ var addZeros = function(date){
 }
 
 function createDayGraph(json){
+	(function(){
+		$('input#Month').removeClass();
+		$('input#Year').removeClass();
+		$('input#intraDay').addClass('activeGraph');
+	})(jQuery);
+	
 	var dateTime = new Date();
 	var times = new Array();
 	var priceData = new Array();

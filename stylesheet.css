@@ -45,3 +45,7 @@ footer{
 a{
 	color:#fff;
 }
+.activeGraph{
+	background-color:#01307c;
+	color:#fff;
+}
